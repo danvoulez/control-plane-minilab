@@ -7,7 +7,20 @@ use anyhow::{anyhow, Result};
 use clap::{Args, Parser, Subcommand};
 use serde_json::{json, Value};
 
-use crate::{contracts::*, output::print_json, validate::*};
+use crate::{
+    adapters::{AuthorityError, SupabaseHttpReadAdapter},
+    contracts::*,
+    output::print_json,
+    repositories::{
+        config_registry::ConfigRegistryRepository, registry::RegistryRepository,
+        release::ReleaseRepository,
+    },
+    resolve::{
+        action::{resolve_action, response as authority_response},
+        principal::ghost_for_error,
+    },
+    validate::*,
+};
 
 const CONTRACT_NAMES: &[&str] = &[
     "ServiceContract",
@@ -54,6 +67,18 @@ enum Commands {
         #[command(subcommand)]
         command: ConfigCommand,
     },
+    Registry {
+        #[command(subcommand)]
+        command: RegistryCommand,
+    },
+    Release {
+        #[command(subcommand)]
+        command: ReleaseCommand,
+    },
+    Resolve {
+        #[command(subcommand)]
+        command: ResolveCommand,
+    },
     Policy {
         #[command(subcommand)]
         command: PolicyCommand,
@@ -79,6 +104,43 @@ struct CheckArgs {
 #[derive(Debug, Subcommand)]
 enum ConfigCommand {
     Doctor(DoctorArgs),
+    Key(KeyArgs),
+}
+
+#[derive(Debug, Subcommand)]
+enum RegistryCommand {
+    Get(GetEntityArgs),
+}
+
+#[derive(Debug, Subcommand)]
+enum ReleaseCommand {
+    Latest(PackageArgs),
+}
+
+#[derive(Debug, Subcommand)]
+enum ResolveCommand {
+    Action(ActionArgs),
+}
+
+#[derive(Debug, Args)]
+struct GetEntityArgs {
+    entity_id: String,
+    #[arg(long)]
+    json: bool,
+}
+
+#[derive(Debug, Args)]
+struct PackageArgs {
+    package_name: String,
+    #[arg(long)]
+    json: bool,
+}
+
+#[derive(Debug, Args)]
+struct KeyArgs {
+    key_name: String,
+    #[arg(long)]
+    json: bool,
 }
 
 #[derive(Debug, Args)]
@@ -119,6 +181,20 @@ pub fn run() -> Result<()> {
         },
         Commands::Config { command } => match command {
             ConfigCommand::Doctor(args) => config_doctor(args.dry_run, cli.json),
+            ConfigCommand::Key(args) => config_key(&args.key_name, cli.json || args.json),
+        },
+        Commands::Registry { command } => match command {
+            RegistryCommand::Get(args) => registry_get(&args.entity_id, cli.json || args.json),
+        },
+        Commands::Release { command } => match command {
+            ReleaseCommand::Latest(args) => {
+                release_latest(&args.package_name, cli.json || args.json)
+            }
+        },
+        Commands::Resolve { command } => match command {
+            ResolveCommand::Action(args) => {
+                resolve_action_command(args.clone(), cli.json || args.json)
+            }
         },
         Commands::Policy { command } => match command {
             PolicyCommand::Check(args) => policy_check(args.clone(), cli.json || args.json),
@@ -247,6 +323,129 @@ pub fn config_doctor_from_env(mut keys: Vec<String>) -> ConfigDoctorResult {
         legacy_keys_used,
         secret_values_printed: false,
         checked_at: now_string(),
+    }
+}
+
+fn registry_get(entity_id: &str, as_json: bool) -> Result<()> {
+    let output = match SupabaseHttpReadAdapter::from_env() {
+        Ok(adapter) => match RegistryRepository::new(&adapter).get(entity_id) {
+            Ok(entity) => authority_response(
+                true,
+                AuthorityStatus::Ok,
+                "registry entity resolved",
+                Some(json!({ "entity": entity })),
+                vec![],
+                vec![],
+            ),
+            Err(err) => authority_response(
+                false,
+                AuthorityStatus::Ghost,
+                "registry entity unresolved",
+                None,
+                vec![ghost_for_error(entity_id, err)],
+                vec![],
+            ),
+        },
+        Err(err) => authority_response(
+            false,
+            AuthorityStatus::Ghost,
+            "registry adapter unavailable",
+            None,
+            vec![ghost_for_error(entity_id, err)],
+            vec![],
+        ),
+    };
+    print_response(output, as_json)
+}
+
+fn release_latest(package_name: &str, as_json: bool) -> Result<()> {
+    let output = match SupabaseHttpReadAdapter::from_env() {
+        Ok(adapter) => match ReleaseRepository::new(&adapter).latest_published(package_name) {
+            Ok(artifact) => authority_response(
+                true,
+                AuthorityStatus::Ok,
+                "latest published release resolved",
+                Some(json!({ "artifact": artifact })),
+                vec![],
+                vec![],
+            ),
+            Err(err) => authority_response(
+                false,
+                AuthorityStatus::Ghost,
+                "release artifact unresolved",
+                None,
+                vec![ghost_for_error(package_name, err)],
+                vec![],
+            ),
+        },
+        Err(err) => authority_response(
+            false,
+            AuthorityStatus::Ghost,
+            "release adapter unavailable",
+            None,
+            vec![ghost_for_error(package_name, err)],
+            vec![],
+        ),
+    };
+    print_response(output, as_json)
+}
+
+fn config_key(key_name: &str, as_json: bool) -> Result<()> {
+    let output = match SupabaseHttpReadAdapter::from_env() {
+        Ok(adapter) => match ConfigRegistryRepository::new(&adapter).get_key(key_name) {
+            Ok(mut key) => {
+                key.value = None;
+                authority_response(
+                    true,
+                    AuthorityStatus::Ok,
+                    "config key resolved",
+                    Some(json!({ "key": key })),
+                    vec![],
+                    vec![],
+                )
+            }
+            Err(err) => authority_response(
+                false,
+                AuthorityStatus::Ghost,
+                "config key unresolved",
+                None,
+                vec![ghost_for_error(key_name, err)],
+                vec![],
+            ),
+        },
+        Err(err) => authority_response(
+            false,
+            AuthorityStatus::Ghost,
+            "config adapter unavailable",
+            None,
+            vec![ghost_for_error(key_name, err)],
+            vec![],
+        ),
+    };
+    print_response(output, as_json)
+}
+
+fn resolve_action_command(args: ActionArgs, as_json: bool) -> Result<()> {
+    let output = match SupabaseHttpReadAdapter::from_env() {
+        Ok(adapter) => resolve_action(&adapter, &args.actor, &args.action, &args.resource),
+        Err(err) => authority_response(
+            false,
+            AuthorityStatus::Ghost,
+            "resolve adapter unavailable",
+            None,
+            vec![ghost_for_error(&args.actor, err)],
+            vec![],
+        ),
+    };
+    print_response(output, as_json)
+}
+
+fn print_response(output: AuthorityResponse, as_json: bool) -> Result<()> {
+    if as_json {
+        print_json(&output)
+    } else {
+        println!("{}", serde_json::to_string_pretty(&output)?);
+        Ok(())
     }
 }
 

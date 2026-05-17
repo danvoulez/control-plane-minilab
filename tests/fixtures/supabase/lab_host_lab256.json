@@ -1,0 +1,7 @@
+{
+  "host_id": "lab256",
+  "display_name": "LAB 256",
+  "runtime_entity_id": "minilab-host-runtime",
+  "runtime_version": "0.1.0",
+  "status": "online"
+}

@@ -1,0 +1,7 @@
+{
+  "entity_id": "dan",
+  "name": "Dan",
+  "kind": "person",
+  "status": "active",
+  "evidence_status": "observed"
+}

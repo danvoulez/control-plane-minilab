@@ -1,0 +1,10 @@
+{
+  "artifact_id": "artifact_minilab_host_runtime_0_2_0",
+  "package_name": "minilab-host-runtime",
+  "version": "0.2.0",
+  "storage_bucket": "release-artifacts",
+  "storage_path": "minilab-host-runtime/0.2.0/package.tar.gz",
+  "sha256": "",
+  "size_bytes": null,
+  "status": "planned"
+}
