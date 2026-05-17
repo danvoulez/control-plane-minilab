@@ -1,0 +1,9 @@
+{
+  "contract_name": "CommandEnvelope",
+  "command_id": "cmd_gate_update_lab256",
+  "command": "gate.decide",
+  "actor": { "entity_id": "dan", "kind": "human" },
+  "input": { "verb": "update_host_runtime", "resource_id": "lab256" },
+  "requested_at": "2026-05-16T15:00:00Z",
+  "dry_run": true
+}

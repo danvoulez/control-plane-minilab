@@ -1,0 +1,55 @@
+{
+  "contract_name": "Ghost",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for Ghost; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "ghost_id",
+    "kind",
+    "subject",
+    "reason",
+    "detected_at"
+  ],
+  "allowed_values": {
+    "kind": [
+      "missing_registry_entity",
+      "missing_config",
+      "forbidden_config",
+      "missing_evidence",
+      "runtime_unavailable",
+      "release_unpublished",
+      "auth_unverified",
+      "receipt_unverified",
+      "unknown"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "ghost_id": "ghost_01",
+    "kind": "missing_registry_entity",
+    "subject": "lab999",
+    "reason": "registry resolution is not wired or entity is absent",
+    "detected_at": "2026-05-16T15:00:00Z"
+  }
+}

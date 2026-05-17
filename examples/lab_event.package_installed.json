@@ -1,0 +1,17 @@
+{
+  "contract_name": "LabEvent",
+  "event_id": "labev_package_installed_01",
+  "host_id": "lab256",
+  "event_type": "PACKAGE_INSTALLED",
+  "runtime_version": "0.1.0",
+  "evidence": {
+    "evidence_id": "ev_package_installed_01",
+    "mode": "observed",
+    "source": "lab256",
+    "observed_at": "2026-05-16T15:00:00Z",
+    "summary": "package installed; operational values redacted",
+    "secret_redacted": true
+  },
+  "secret_redacted": true,
+  "observed_at": "2026-05-16T15:00:00Z"
+}

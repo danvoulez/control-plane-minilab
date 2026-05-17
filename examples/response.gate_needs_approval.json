@@ -1,0 +1,22 @@
+{
+  "policy_decision": {
+    "decision_id": "pdec_01",
+    "action_id": "actreq_01",
+    "engine": "stub_policy_v0",
+    "decision": "needs_approval",
+    "reasons": ["update_host_runtime requires human approval before consequence"],
+    "evaluated_at": "2026-05-16T15:00:00Z"
+  },
+  "gate_request": {
+    "gate_id": "gate_01",
+    "action_id": "actreq_01",
+    "actor": { "entity_id": "dan", "kind": "human" },
+    "resource": { "kind": "lab", "id": "lab256" },
+    "policy_decision_id": "pdec_01",
+    "status": "pending",
+    "requested_at": "2026-05-16T15:00:00Z",
+    "required_approver": "dan",
+    "reason": "update_host_runtime requires human approval before consequence"
+  },
+  "secret_values_printed": false
+}

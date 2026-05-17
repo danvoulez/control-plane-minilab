@@ -1,0 +1,53 @@
+{
+  "contract_name": "AuthContext",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for AuthContext; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "method",
+    "verified",
+    "scopes",
+    "token_present",
+    "token_value_printed"
+  ],
+  "allowed_values": {
+    "method": [
+      "none",
+      "bearer_token",
+      "jwt",
+      "oidc",
+      "passkey",
+      "mcp_token",
+      "local_dev"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "method": "local_dev",
+    "verified": false,
+    "scopes": [],
+    "token_present": false,
+    "token_value_printed": false
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "contract_name": "Ghost",
+  "ghost_id": "ghost_missing_lab999",
+  "kind": "missing_registry_entity",
+  "subject": "lab999",
+  "reason": "registry resolution is not wired or entity is absent",
+  "detected_at": "2026-05-16T15:00:00Z"
+}

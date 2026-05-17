@@ -1,0 +1,49 @@
+{
+  "contract_name": "ResourceRef",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for ResourceRef; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "kind",
+    "id"
+  ],
+  "allowed_values": {
+    "kind": [
+      "entity",
+      "lab",
+      "runtime",
+      "release_artifact",
+      "config_key",
+      "receipt",
+      "database",
+      "storage_object",
+      "mcp_tool"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "kind": "lab",
+    "id": "lab256"
+  }
+}

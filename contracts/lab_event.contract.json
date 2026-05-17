@@ -1,0 +1,54 @@
+{
+  "contract_name": "LabEvent",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for LabEvent; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "event_id",
+    "host_id",
+    "event_type",
+    "runtime_version",
+    "evidence",
+    "secret_redacted",
+    "observed_at"
+  ],
+  "allowed_values": {},
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "event_id": "labev_01",
+    "host_id": "lab256",
+    "event_type": "PACKAGE_INSTALLED",
+    "runtime_version": "0.1.0",
+    "evidence": {
+      "evidence_id": "ev_01",
+      "mode": "observed",
+      "source": "lab256",
+      "observed_at": "2026-05-16T15:00:00Z",
+      "summary": "package installed; values redacted",
+      "secret_redacted": true
+    },
+    "secret_redacted": true,
+    "observed_at": "2026-05-16T15:00:00Z"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "contract_name": "ContractFillingGuideV0",
+  "version": "0.1.0",
+  "doctrine": [
+    "Registry resolves recognized existence",
+    "Doppler stores operational values, not institutional meaning",
+    "Policy decides permission",
+    "Gate contains consequence",
+    "ExecutionWindow is scoped, temporary, and single-use",
+    "Evidence is observed output",
+    "Receipt is proof closure",
+    "Ghost is structured absence",
+    "LABs execute; they do not govern",
+    "Natural language never executes",
+    "Provider success is evidence input, not closure",
+    "Receipts beat stories"
+  ],
+  "global_rules": [
+    "Do not invent world; reference recognized, observed, or ghosted world",
+    "Do not store operational values in repo, database, receipts, or logs",
+    "No DB/Doppler/network calls in v0 validators",
+    "Unknowns become ghosts, not success"
+  ],
+  "resolvers": {
+    "identity_source": "registry.entities",
+    "relationship_source": "registry.links",
+    "runtime_source": "registry.runtimes",
+    "mandate_source": "registry.mandates",
+    "config_requirement_source": "registry.config_requirements + config_registry.keys",
+    "operational_value_source": "Doppler only",
+    "release_source": "release_registry.artifacts",
+    "installation_source": "release_registry.installations",
+    "lab_life_source": "lab_observability.events + lab_observability.current_state",
+    "receipt_source": "ops.receipt_index",
+    "logline_act_source": "ops.logline_acts"
+  },
+  "who_may_fill_what": {
+    "caller_may_fill": [
+      "command",
+      "input",
+      "intent",
+      "requested_at",
+      "dry_run",
+      "actor_claim",
+      "resource_target"
+    ],
+    "authority_core_must_fill": [
+      "policy_decision",
+      "gate_request",
+      "execution_window",
+      "authority_response",
+      "ghost",
+      "error_contract"
+    ],
+    "database_must_resolve": [
+      "registry_entity_ref",
+      "release_artifact_ref",
+      "known_lab_host",
+      "known_config_requirement",
+      "receipt_index"
+    ],
+    "runtime_must_observe": [
+      "lab_event",
+      "evidence_ref",
+      "doctor_result",
+      "smoke_result",
+      "healthcheck_result"
+    ],
+    "never_user_supplied_as_truth": [
+      "verified=true",
+      "receipt_status=closed",
+      "execution_window.status=open",
+      "policy_decision=ok",
+      "secret_redacted=true without scan",
+      "release_artifact.status=published",
+      "evidence_mode=verified"
+    ]
+  },
+  "default_modes": {
+    "dry_run": true,
+    "service_mode": "cli",
+    "external_effects_enabled": false,
+    "policy_engine": "stub_policy_v0"
+  },
+  "default_decisions": {
+    "mutating": "needs_approval",
+    "llm_execute": "denied",
+    "unknown_entity": "ghost",
+    "read_status_list": "ok"
+  },
+  "default_evidence_status": {
+    "registry": "declared",
+    "runtime": "observed",
+    "receipt": "unverified",
+    "provider_success": "observed_input_only"
+  },
+  "default_secret_policy": {
+    "print_values": false,
+    "store_values": false,
+    "accepted_locations": [
+      "Doppler"
+    ],
+    "hard_forbidden_keys": [
+      "NEXT_PUBLIC_SUPABASE_SECRET_KEY",
+      "NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "preferred_keys": [
+      "SUPABASE_SECRET_KEY",
+      "SUPABASE_PUBLISHABLE_KEY"
+    ],
+    "legacy_fallback_keys": [
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "SUPABASE_ANON_KEY"
+    ]
+  },
+  "contract_specific_rules": {
+    "ActionRequest": {
+      "risk_class": "derived by authority from verb"
+    },
+    "GateRequest": {
+      "status": "pending on creation",
+      "required_approver": "dan for protected/update/install/delete/publish"
+    },
+    "ExecutionWindow": {
+      "created_only_after_approval": true,
+      "single_use": true
+    },
+    "ConfigDoctorResult": {
+      "names_only": true,
+      "no_values": true
+    },
+    "AuthorityResponse": {
+      "ok_requires_no_ghosts_or_errors": true
+    }
+  },
+  "flow_specific_contract_order": {
+    "host_runtime_update": [
+      "CommandEnvelope",
+      "PrincipalRef",
+      "AuthContext",
+      "ActionRequest",
+      "PolicyDecision",
+      "GateRequest",
+      "ExecutionWindow",
+      "ReleaseArtifactRef",
+      "HostRuntimeUpdateRequest",
+      "LabEvent",
+      "EvidenceRef",
+      "ConfigDoctorResult",
+      "ReceiptRef",
+      "AuthorityResponse"
+    ],
+    "config_doctor": [
+      "CommandEnvelope",
+      "ActionRequest",
+      "ConfigDoctorResult",
+      "EvidenceRef",
+      "AuthorityResponse"
+    ],
+    "release_publish": [
+      "CommandEnvelope",
+      "ActionRequest",
+      "PolicyDecision",
+      "GateRequest",
+      "ExecutionWindow",
+      "ReleaseArtifactRef",
+      "EvidenceRef",
+      "ReceiptRef",
+      "AuthorityResponse"
+    ],
+    "bootstrap_lab": [
+      "CommandEnvelope",
+      "RegistryEntityRef",
+      "ReleaseArtifactRef",
+      "HostRuntimeUpdateRequest",
+      "LabEvent",
+      "EvidenceRef",
+      "ReceiptRef",
+      "AuthorityResponse"
+    ]
+  },
+  "success_conditions": {
+    "host_runtime_update": [
+      "PACKAGE_DOWNLOADED",
+      "PACKAGE_VERIFIED",
+      "PACKAGE_INSTALLED",
+      "DOCTOR_PASSED",
+      "SMOKE_PASSED"
+    ],
+    "config_doctor": [
+      "no_forbidden_keys",
+      "no_secret_values_printed",
+      "required_keys_present_or_warned",
+      "brakes_valid"
+    ],
+    "release_publish": [
+      "secret_scan_passed",
+      "sha256_generated",
+      "storage_upload_verified",
+      "release_registry_artifact_status_published"
+    ],
+    "bootstrap_lab": [
+      "package_verified",
+      "host_runtime_installed",
+      "doctor_passed",
+      "smoke_passed"
+    ]
+  }
+}
