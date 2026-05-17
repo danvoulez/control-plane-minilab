@@ -3,6 +3,17 @@ use serde::{Deserialize, Serialize};
 use super::AuthorityStatus;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ConfigKeyRef {
+    pub key_name: String,
+    pub required: bool,
+    pub secret: bool,
+    pub provider: Option<String>,
+    pub status: String,
+    #[serde(default)]
+    pub value: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ConfigDoctorResult {
     pub run_id: String,
     pub status: AuthorityStatus,

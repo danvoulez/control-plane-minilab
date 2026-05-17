@@ -1,7 +1,10 @@
 #![allow(dead_code, unused_imports)]
+mod adapters;
 mod cli;
 mod contracts;
 mod output;
+mod repositories;
+mod resolve;
 mod validate;
 
 fn main() {
