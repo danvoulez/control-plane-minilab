@@ -1,0 +1,65 @@
+{
+  "contract_name": "GateRequest",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for GateRequest; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "gate_id",
+    "action_id",
+    "actor",
+    "resource",
+    "policy_decision_id",
+    "status",
+    "requested_at",
+    "required_approver",
+    "reason"
+  ],
+  "allowed_values": {
+    "status": [
+      "pending",
+      "approved",
+      "denied",
+      "ghosted",
+      "expired"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "gate_id": "gate_01",
+    "action_id": "actreq_01",
+    "actor": {
+      "entity_id": "dan",
+      "kind": "human"
+    },
+    "resource": {
+      "kind": "lab",
+      "id": "lab256"
+    },
+    "policy_decision_id": "pdec_01",
+    "status": "pending",
+    "requested_at": "2026-05-16T15:00:00Z",
+    "required_approver": "dan",
+    "reason": "host runtime update requires human approval"
+  }
+}

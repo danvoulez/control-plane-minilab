@@ -1,0 +1,71 @@
+{
+  "contract_name": "ConfigDoctorResult",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for ConfigDoctorResult; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "run_id",
+    "status",
+    "doppler_project",
+    "doppler_config",
+    "keys_present",
+    "keys_missing",
+    "keys_unknown",
+    "keys_forbidden",
+    "canonical_keys_used",
+    "legacy_keys_used",
+    "secret_values_printed",
+    "checked_at"
+  ],
+  "allowed_values": {
+    "status": [
+      "ok",
+      "warn",
+      "error",
+      "ghost"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "run_id": "doctor_01",
+    "status": "warn",
+    "doppler_project": "minilab",
+    "doppler_config": "dev_local",
+    "keys_present": [
+      "SUPABASE_URL",
+      "SUPABASE_SECRET_KEY"
+    ],
+    "keys_missing": [
+      "SUPABASE_PUBLISHABLE_KEY"
+    ],
+    "keys_unknown": [],
+    "keys_forbidden": [],
+    "canonical_keys_used": [
+      "SUPABASE_SECRET_KEY"
+    ],
+    "legacy_keys_used": [],
+    "secret_values_printed": false,
+    "checked_at": "2026-05-16T15:00:00Z"
+  }
+}

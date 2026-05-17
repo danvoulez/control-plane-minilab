@@ -1,0 +1,56 @@
+{
+  "contract_name": "ExecutionWindow",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for ExecutionWindow; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "window_id",
+    "gate_id",
+    "actor_entity_id",
+    "allowed_action",
+    "allowed_resource_id",
+    "scope_hash",
+    "expires_at",
+    "status"
+  ],
+  "allowed_values": {
+    "status": [
+      "open",
+      "consumed",
+      "expired",
+      "revoked"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "window_id": "win_01",
+    "gate_id": "gate_01",
+    "actor_entity_id": "dan",
+    "allowed_action": "update_host_runtime",
+    "allowed_resource_id": "lab256",
+    "scope_hash": "sha256:example-redacted-scope",
+    "expires_at": "2026-05-16T15:10:00Z",
+    "status": "open"
+  }
+}

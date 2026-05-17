@@ -1,60 +1,10 @@
 [package]
-name = "meu-servico"
+name = "minilab-control-plane-authority"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# ─── Runtime async ───────────────────────────────────────────────
-tokio = { version = "1", features = ["full"] }
-
-# ─── Web framework + gates/middleware ────────────────────────────
-axum = { version = "0.7", features = ["macros"] }
-tower = "0.5"
-tower-http = { version = "0.6", features = ["auth", "cors", "trace", "limit", "compression-gzip"] }
-
-# ─── Serialização ────────────────────────────────────────────────
+anyhow = "1"
+clap = { version = "4", features = ["derive", "env"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-
-# ─── Auth: tokens, OAuth/OIDC, senhas ────────────────────────────
-jsonwebtoken = "9"          # JWT (HS/RS/ES)
-oauth2       = "4"          # cliente OAuth 2.0
-openidconnect = "3"         # OIDC sobre oauth2
-argon2       = "0.5"        # hash de senha (recomendado)
-# biscuit-auth = "5"        # alternativa moderna ao JWT (descomente se usar)
-
-# ─── Engine de política / autorização ────────────────────────────
-cedar-policy = "4"          # política declarativa estilo AWS
-# casbin     = "2"          # alternativa RBAC/ABAC/ACL (escolha um)
-
-# ─── Regras dinâmicas (opcional) ─────────────────────────────────
-# rhai = "1"                # scripting embutido p/ regras em runtime
-
-# ─── CLI (mesmo binário ou sub-binário admin) ────────────────────
-clap       = { version = "4", features = ["derive", "env"] }
-dialoguer  = "0.11"
-indicatif  = "0.17"
-console    = "0.15"
-
-# ─── Erros, logs, observabilidade ────────────────────────────────
-anyhow            = "1"
-thiserror         = "1"
-tracing           = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-
-# ─── Config, paths, env ──────────────────────────────────────────
-config    = "0.14"
-directories = "5"
-dotenvy   = "0.15"
-
-# ─── (Opcional) Banco de dados ───────────────────────────────────
-# sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "migrate"] }
-
-# Se quiser separar a CLI em outro binário:
-# [[bin]]
-# name = "meu-servico"
-# path = "src/main.rs"
-#
-# [[bin]]
-# name = "meu-servico-admin"
-# path = "src/bin/admin.rs"

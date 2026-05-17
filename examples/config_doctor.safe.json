@@ -1,0 +1,15 @@
+{
+  "contract_name": "ConfigDoctorResult",
+  "run_id": "doctor_safe_01",
+  "status": "warn",
+  "doppler_project": "minilab",
+  "doppler_config": "dev_local",
+  "keys_present": ["SUPABASE_URL", "SUPABASE_SECRET_KEY"],
+  "keys_missing": ["SUPABASE_PUBLISHABLE_KEY"],
+  "keys_unknown": [],
+  "keys_forbidden": [],
+  "canonical_keys_used": ["SUPABASE_SECRET_KEY"],
+  "legacy_keys_used": [],
+  "secret_values_printed": false,
+  "checked_at": "2026-05-16T15:00:00Z"
+}

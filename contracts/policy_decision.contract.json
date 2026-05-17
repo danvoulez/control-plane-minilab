@@ -1,0 +1,59 @@
+{
+  "contract_name": "PolicyDecision",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for PolicyDecision; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "decision_id",
+    "action_id",
+    "engine",
+    "decision",
+    "reasons",
+    "evaluated_at"
+  ],
+  "allowed_values": {
+    "decision": [
+      "ok",
+      "denied",
+      "needs_approval",
+      "ghost",
+      "error"
+    ],
+    "engine": [
+      "stub_policy_v0",
+      "cedar"
+    ]
+  },
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "decision_id": "pdec_01",
+    "action_id": "actreq_01",
+    "engine": "stub_policy_v0",
+    "decision": "needs_approval",
+    "reasons": [
+      "host runtime update requires human approval"
+    ],
+    "evaluated_at": "2026-05-16T15:00:00Z"
+  }
+}

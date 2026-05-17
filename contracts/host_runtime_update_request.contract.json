@@ -1,0 +1,57 @@
+{
+  "contract_name": "HostRuntimeUpdateRequest",
+  "version": "0.1.0",
+  "purpose": "P0 authority contract for HostRuntimeUpdateRequest; materializes Control Plane Authority Core language without external effects.",
+  "filled_by": "authority_core",
+  "validated_by": "minilab-control-plane-authority validators",
+  "source_of_truth": "registry/policy/gate/evidence/receipt doctrine; values resolved only from recognized sources or ghosts",
+  "required_fields": [
+    "request_id",
+    "host_id",
+    "current_version",
+    "target_artifact",
+    "doctor_required",
+    "smoke_required",
+    "requested_at",
+    "dry_run"
+  ],
+  "allowed_values": {},
+  "forbidden_values": [
+    "raw credentials",
+    "provider success as closure",
+    "caller supplied ok decision",
+    "unverified receipt closure"
+  ],
+  "forbidden_patterns": [
+    "raw token values",
+    "api key values",
+    "password values",
+    "private key values",
+    "bearer values"
+  ],
+  "invariants": [
+    "natural language never executes",
+    "provider success is evidence input not closure",
+    "receipts beat stories",
+    "unknowns become ghosts not ok",
+    "no external effects in v0 validators"
+  ],
+  "example": {
+    "request_id": "hru_01",
+    "host_id": "lab256",
+    "current_version": "0.0.9",
+    "target_artifact": {
+      "artifact_id": "minilab-host-runtime@0.1.0",
+      "package_name": "minilab-host-runtime",
+      "version": "0.1.0",
+      "storage_bucket": "releases",
+      "storage_path": "minilab-host-runtime/0.1.0/package.tar.gz",
+      "sha256": "sha256-example-placeholder",
+      "status": "published"
+    },
+    "doctor_required": true,
+    "smoke_required": true,
+    "requested_at": "2026-05-16T15:00:00Z",
+    "dry_run": true
+  }
+}
